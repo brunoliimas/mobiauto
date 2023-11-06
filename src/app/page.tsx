@@ -19,7 +19,7 @@ const Header = styled.header`
 export const Title = styled.h1`
   font-size: 1.6rem;
   font-weight: bold;
-`;
+  `
 
 const Subtitle = styled.h2`
   font-size: 1.2rem;

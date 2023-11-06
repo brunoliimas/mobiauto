@@ -1,11 +1,12 @@
 import { Title } from "@/app/page";
 import { Container } from "@mui/material";
 import styled from "styled-components";
+
 interface PriceDisplayProps {
-    marca: string;
-    modelo: string;
-    ano: string;
-    preco: string
+    brand: string;
+    model: string;
+    year: string;
+    price: string;
 }
 
 const PriceBox = styled(Container)`
@@ -15,8 +16,8 @@ const PriceBox = styled(Container)`
     background-color: #DCF5F2;
     padding: 30px 40px;
     margin: 20px 0;
-
 `
+
 const Price = styled.span`
     margin: 20px 0;
     font-size: 1.2rem;
@@ -27,17 +28,17 @@ const Price = styled.span`
     border-radius: 50px;
 `
 
-export default function PriceDisplay({ marca, modelo, ano, preco }: PriceDisplayProps) {
+export default function PriceDisplay({ brand, model, year, price }: PriceDisplayProps) {
 
-    if (!preco) {
+    if (!price) {
         return null;
     }
 
     return (
         <PriceBox>
-            <Title>Tabela Fipe: Preço {marca} {modelo} {ano}</Title>
-            <Price>{preco}</Price>
-            <small>Este é o preço da compra do veículo</small>
+            <Title>Fipe Table: Price {brand} {model} {year}</Title>
+            <Price>{price}</Price>
+            <small>This is the vehicle purchase price</small>
         </PriceBox>
     );
 }

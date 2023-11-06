@@ -12,109 +12,106 @@ const StyledForm = styled.form`
     gap: 20px;
     max-width: 500px;
     margin: 0 auto;
-    background-color: #ffffff; 
+    background-color: #ffffff;
     padding: 30px 40px;
 `;
 
-const FormControlStyled = styled(FormControl)`
+const StyledFormControl = styled(FormControl)`
     width: 100%;
-`
-const ButtonForm = styled(Button)`
+`;
+
+const StyledButton = styled(Button)`
     background-color: #5D00BF;
-`
+`;
 
 export default function CarPriceForm() {
     const {
-        marcas,
-        modelos,
-        anos,
-        preco,
-        setMarca,
-        setModelo,
-        setAno,
-        handleConsultarPreco,
+        brands,
+        models,
+        years,
+        price,
+        setBrand,
+        setModel,
+        setYear,
+        handleConsultPrice,
     } = useAPI();
 
+    const [selectedBrand, setSelectedBrand] = useState("");
+    const [selectedModel, setSelectedModel] = useState("");
+    const [selectedYear, setSelectedYear] = useState("");
 
-    const [marcaSelecionada, setMarcaSelecionada] = useState<string>("");
-    const [modeloSelecionado, setModeloSelecionado] = useState<string>("");
-    const [anoSelecionado, setAnoSelecionado] = useState<string>("");
-
-
-    const selectedMarcaLabel = marcas.find((opcao) => opcao.value === marcaSelecionada)?.label || '';
-    const selectedModeloLabel = modelos.find((opcao) => opcao.value === modeloSelecionado)?.label || '';
-    const selectedAnoLabel = anos.find((opcao) => opcao.value === anoSelecionado)?.label || '';
-
+    const selectedBrandLabel = brands.find((option) => option.value === selectedBrand)?.label || "";
+    const selectedModelLabel = models.find((option) => option.value === selectedModel)?.label || "";
+    const selectedYearLabel = years.find((option) => option.value === selectedYear)?.label || "";
 
     return (
         <Container>
             <StyledForm>
-                <FormControlStyled variant="outlined">
-                    <InputLabel>Marca</InputLabel>
+                <StyledFormControl variant="outlined">
+                    <InputLabel>Brand</InputLabel>
                     <Select
-                        value={marcaSelecionada}
+                        value={selectedBrand}
                         onChange={(e) => {
-                            setMarca(e.target.value as string);
-                            setMarcaSelecionada(e.target.value);
+                            setBrand(e.target.value as string);
+                            setSelectedBrand(e.target.value);
                         }}
-                        label="Marca"
+                        label="Brand"
                     >
-                        {marcas.map((opcao) => (
-                            <MenuItem key={opcao.value} value={opcao.value}>
-                                {opcao.label}
+                        {brands.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
                             </MenuItem>
                         ))}
                     </Select>
-                </FormControlStyled>
+                </StyledFormControl>
 
-                <FormControlStyled variant="outlined">
-                    <InputLabel>Modelo</InputLabel>
+                <StyledFormControl variant="outlined">
+                    <InputLabel>Model</InputLabel>
                     <Select
-                        value={modeloSelecionado}
+                        value={selectedModel}
                         onChange={(e) => {
-                            setModelo(e.target.value as string),
-                                setModeloSelecionado(e.target.value)
+                            setModel(e.target.value as string);
+                            setSelectedModel(e.target.value);
                         }}
-                        label="Modelo"
+                        label="Model"
                     >
-                        {modelos.map((opcao) => (
-                            <MenuItem key={opcao.value} value={opcao.value}>
-                                {opcao.label}
+                        {models.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
                             </MenuItem>
                         ))}
                     </Select>
-                </FormControlStyled>
+                </StyledFormControl>
 
-                {modeloSelecionado && (
-                    <FormControlStyled variant="outlined">
-                        <InputLabel>Ano</InputLabel>
+                {selectedModel && (
+                    <StyledFormControl variant="outlined">
+                        <InputLabel>Year</InputLabel>
                         <Select
-                            value={anoSelecionado}
+                            value={selectedYear}
                             onChange={(e) => {
-                                setAno(e.target.value as string);
-                                setAnoSelecionado(e.target.value);
+                                setYear(e.target.value as string);
+                                setSelectedYear(e.target.value);
                             }}
-                            label="Ano"
+                            label="Year"
                         >
-                            {anos.map((opcao) => (
-                                <MenuItem key={opcao.value} value={opcao.value}>
-                                    {opcao.label}
+                            {years.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControlStyled>
+                    </StyledFormControl>
                 )}
 
-                <ButtonForm variant="contained" color="primary" onClick={handleConsultarPreco}>
-                    Consultar Preço
-                </ButtonForm>
-
+                <StyledButton variant="contained" color="primary" onClick={handleConsultPrice}>
+                    Consult Price
+                </StyledButton>
             </StyledForm>
             <PriceDisplay
-                marca={selectedMarcaLabel}
-                modelo={selectedModeloLabel}
-                ano={selectedAnoLabel}
-                preco={preco}
+                brand={selectedBrandLabel}
+                model={selectedModelLabel}
+                year={selectedYearLabel}
+                price={price}
             />
         </Container>
     );

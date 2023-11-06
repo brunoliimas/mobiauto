@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
 
-interface APIProviderPorps {
+interface APIProviderProps {
     children: ReactNode
 }
 
@@ -11,19 +11,19 @@ interface Option {
 }
 
 interface CarsProps {
-    codigo: string;
-    nome: string;
+    code: string;
+    name: string;
 }
 
 interface APIContextType {
-    marcas: Option[];
-    modelos: Option[];
-    anos: Option[];
-    preco: string;
-    setMarca: (marca: string) => void;
-    setModelo: (modelo: string) => void;
-    setAno: (ano: string) => void;
-    handleConsultarPreco: () => void;
+    brands: Option[];
+    models: Option[];
+    years: Option[];
+    price: string;
+    setBrand: (brand: string) => void;
+    setModel: (model: string) => void;
+    setYear: (year: string) => void;
+    handleConsultPrice: () => void;
 }
 
 const APIContext = createContext<APIContextType | undefined>(undefined);
@@ -31,82 +31,82 @@ const APIContext = createContext<APIContextType | undefined>(undefined);
 export const useAPI = (): APIContextType => {
     const context = useContext(APIContext);
     if (!context) {
-        throw new Error("useAPI deve ser usado dentro de um Provider de APIContext");
+        throw new Error("useAPI must be used within an APIContext Provider");
     }
     return context;
 };
 
-export const APIProvider = ({ children }: APIProviderPorps) => {
-    const [marca, setMarca] = useState<string>("");
-    const [modelo, setModelo] = useState<string>("");
-    const [ano, setAno] = useState<string>("");
-    const [preco, setPreco] = useState<string>("");
-    const [marcas, setMarcas] = useState<Option[]>([]);
-    const [modelos, setModelos] = useState<Option[]>([]);
-    const [anos, setAnos] = useState<Option[]>([]);
+export const APIProvider = ({ children }: APIProviderProps) => {
+    const [brand, setBrand] = useState<string>("");
+    const [model, setModel] = useState<string>("");
+    const [year, setYear] = useState<string>("");
+    const [price, setPrice] = useState<string>("");
+    const [brands, setBrands] = useState<Option[]>([]);
+    const [models, setModels] = useState<Option[]>([]);
+    const [years, setYears] = useState<Option[]>([]);
 
     useEffect(() => {
         axios.get("https://parallelum.com.br/fipe/api/v1/carros/marcas")
             .then((response) => {
-                const marcasData = response.data.map((marca: CarsProps) => ({
-                    value: marca.codigo,
-                    label: marca.nome,
+                const brandsData = response.data.map((brand: CarsProps) => ({
+                    value: brand.code,
+                    label: brand.name,
                 }));
-                setMarcas(marcasData);
+                setBrands(brandsData);
             })
             .catch((error) => {
-                console.error("Erro ao buscar marcas: ", error);
+                console.error("Error fetching brands: ", error);
             });
     }, []);
 
     useEffect(() => {
-        if (marca) {
-            axios.get(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${marca}/modelos`)
+        if (brand) {
+            axios.get(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${brand}/modelos`)
                 .then((response) => {
-                    const modelosData = response.data.modelos.map((modelo: CarsProps) => ({
-                        value: modelo.codigo,
-                        label: modelo.nome,
+                    const modelsData = response.data.modelos.map((model: CarsProps) => ({
+                        value: model.code,
+                        label: model.name,
                     }));
-                    setModelos(modelosData);
+                    setModels(modelsData);
                 })
                 .catch((error) => {
-                    console.error("Erro ao buscar modelos: ", error);
+                    console.error("Error fetching models: ", error);
                 });
         }
-    }, [marca]);
+    }, [brand]);
 
     useEffect(() => {
-        if (marca && modelo) {
-            axios.get(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${marca}/modelos/${modelo}/anos`)
+        if (brand && model) {
+            axios.get(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${brand}/modelos/${model}/anos`)
                 .then((response) => {
-                    const anosData = response.data.map((ano: CarsProps) => ({
-                        value: ano.codigo,
-                        label: ano.nome,
+                    const yearsData = response.data.map((year: CarsProps) => ({
+                        value: year.code,
+                        label: year.name,
                     }));
-                    setAnos(anosData);
+                    setYears(yearsData);
                 })
                 .catch((error) => {
-                    console.error("Erro ao buscar anos: ", error);
+                    console.error("Error fetching years: ", error);
                 });
         }
-    }, [marca, modelo]);
+    }, [brand, model]);
 
-    const handleConsultarPreco = () => {
-        const url = `https://parallelum.com.br/fipe/api/v1/carros/marcas/${marca}/modelos/${modelo}/anos/${ano}`;
+    const handleConsultPrice = () => {
+        const url = `https://parallelum.com.br/fipe/api/v1/carros/marcas/${brand}/modelos/${model}/anos/${year}`;
         axios.get(url)
             .then((response) => {
-                setPreco(response.data.Valor);
-                setMarca("");
-                setModelo("");
-                setAno("");
+                setPrice(response.data.Valor);
+                setBrand("");
+                setModel("");
+                setYear("");
             })
             .catch((error) => {
-                console.error("Erro ao buscar preço: ", error);
+                console.error("Error fetching price: ", error);
             });
     };
 
     return (
-        <APIContext.Provider value={{ marcas, modelos, anos, preco, setMarca, setModelo, setAno, handleConsultarPreco }}>
+        <APIContext.Provider value={{ brands, models, years, price, setBrand, setModel, setYear, handleConsultPrice }}>
             {children}
         </APIContext.Provider>
     );
