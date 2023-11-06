@@ -1,7 +1,6 @@
 "use client"
 import CarPriceForm from "@/components/CarFormPrice";
 import { APIProvider } from "@/contexts/APIProvider";
-import { Typography } from "@mui/material";
 import styled from "styled-components";
 
 const Main = styled.main`

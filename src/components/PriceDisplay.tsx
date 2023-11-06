@@ -1,8 +1,6 @@
-import React from "react";
-import { useAPI } from "@/contexts/APIProvider";
-import styled from "styled-components";
-import { Container } from "@mui/material";
 import { Title } from "@/app/page";
+import { Container } from "@mui/material";
+import styled from "styled-components";
 interface PriceDisplayProps {
     marca: string;
     modelo: string;
